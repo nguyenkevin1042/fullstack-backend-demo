@@ -95,7 +95,123 @@ let getAllUsers = () => {
     });
 }
 
+let createNewUser = (dataInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let check = await checkEmail(dataInput.email);
+            if (check == true) {
+                resolve({
+                    errCode: 1,
+                    message: 'Email is already existed'
+                });
+            } else {
+                let hashPassword = await hashPasswordFromInput(dataInput.password);
+                await db.User.create({
+                    email: dataInput.email,
+                    password: hashPassword,
+                    firstName: dataInput.firstName,
+                    lastName: dataInput.lastName,
+                    address: dataInput.address,
+                    gender: dataInput.gender === '0' ? true : false,
+                    roleId: dataInput.roleId,
+                    phoneNumber: dataInput.phoneNumber
+                });
+
+                resolve({
+                    errCode: 0,
+                    message: 'OK'
+                });
+            }
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+let hashPasswordFromInput = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            var hash = await bcrypt.hashSync(password, salt);
+            resolve(hash);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+let deleteUser = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: userId }
+            })
+
+            if (!user) {
+                resolve({
+                    errCode: 1,
+                    message: 'User does not existed'
+                });
+            }
+            if (user) {
+                await db.User.destroy({
+                    where: { id: userId }
+                });
+            }
+
+
+            resolve({
+                errCode: 0,
+                message: 'Success'
+            });
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+let editUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (user) {
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.address = data.address;
+                await user.save();
+                // await db.User.save({
+                //     firstName: data.firstName,
+                //     lastName: data.lastName,
+                //     address: data.address
+                // }, {
+                //     where: { id: data.id }
+                // });
+                resolve({
+                    errCode: 0,
+                    message: 'Success'
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: 'User does not existed'
+                });
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     handleUserLogin: handleUserLogin,
-    getAllUsers: getAllUsers
+    getAllUsers: getAllUsers,
+    createNewUser: createNewUser,
+    deleteUser: deleteUser,
+    editUser: editUser
 }

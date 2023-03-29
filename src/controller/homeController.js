@@ -1,22 +1,6 @@
 import db from '../models/index';
 import CRUDService from '../service/CRUDService';
 
-let getHomepage = async (request, response) => {
-    try {
-        let data = await db.User.findAll();
-
-        return response.render("index.ejs", {
-            data: JSON.stringify(data)
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-let getAboutpage = (request, response) => {
-    return response.render("about.ejs");
-}
-
 let getCRUD = (request, response) => {
     return response.render("crud.ejs");
 }
@@ -70,8 +54,6 @@ let deleteCRUD = async (request, response) => {
 }
 
 module.exports = {
-    getHomepage: getHomepage,
-    getAboutpage: getAboutpage,
     getCRUD: getCRUD,
     postCRUD: postCRUD,
     displayCRUD: displayCRUD,
