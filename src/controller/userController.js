@@ -50,8 +50,10 @@ let handleDeleteUser = async (request, response) => {
         if (idParam === undefined) {
             result.errCode = 2;
             result.message = 'Missing ID';
+        } else {
+            result.message = await userService.deleteUser(idParam).message;
+
         }
-        result.message = await userService.deleteUser(idParam).message;
         return response.status(200).json(result);
     } catch (error) {
         console.log(error);
@@ -76,10 +78,24 @@ let handleEditUser = async (request, response) => {
     }
 }
 
+let handleGetAllCodes = async (request, response) => {
+    try {
+        let data = await userService.getAllCodes(request.query.type);
+        return response.status(200).json(data);
+    } catch (error) {
+        console.log('All errors: ', error);
+        return response.status(200).json({
+            errCode: -1,
+            message: 'Error from server'
+        });
+    }
+}
+
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleDeleteUser: handleDeleteUser,
-    handleEditUser: handleEditUser
+    handleEditUser: handleEditUser,
+    handleGetAllCodes: handleGetAllCodes
 }
