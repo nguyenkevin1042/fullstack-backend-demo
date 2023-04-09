@@ -10,7 +10,7 @@ let handleUserLogin = (emailInput, passwordInput) => {
 
             if (isExisted) {
                 let user = await db.User.findOne({
-                    attributes: ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
                     where: { email: emailInput },
                     raw: true
                 });
@@ -112,9 +112,11 @@ let createNewUser = (dataInput) => {
                     firstName: dataInput.firstName,
                     lastName: dataInput.lastName,
                     address: dataInput.address,
-                    gender: dataInput.gender === '0' ? true : false,
+                    gender: dataInput.gender,
                     roleId: dataInput.roleId,
-                    phoneNumber: dataInput.phoneNumber
+                    positionId: dataInput.positionId,
+                    phoneNumber: dataInput.phoneNumber,
+                    image: dataInput.avatar
                 });
 
                 resolve({
@@ -183,6 +185,11 @@ let editUser = (data) => {
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
                 user.address = data.address;
+                user.phoneNumber = data.phoneNumber;
+                user.roleId = data.roleId;
+                user.positionId = data.positionId;
+                user.gender = data.gender;
+                user.image = data.avatar;
                 await user.save();
                 // await db.User.save({
                 //     firstName: data.firstName,

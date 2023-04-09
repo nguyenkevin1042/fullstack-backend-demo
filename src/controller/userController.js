@@ -80,8 +80,12 @@ let handleEditUser = async (request, response) => {
 
 let handleGetAllCodes = async (request, response) => {
     try {
-        let data = await userService.getAllCodes(request.query.type);
-        return response.status(200).json(data);
+        setTimeout(async () => {
+            let data = await userService.getAllCodes(request.query.type);
+            return response.status(200).json(data);
+        }, 5000)
+        // let data = await userService.getAllCodes(request.query.type);
+        // return response.status(200).json(data);
     } catch (error) {
         console.log('All errors: ', error);
         return response.status(200).json({

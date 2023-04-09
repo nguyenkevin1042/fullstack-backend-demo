@@ -2,6 +2,7 @@ import express from "express";
 // import { UniqueConstraintError } from "sequelize/types";
 import homeController from "../controller/homeController";
 import userController from "../controller/userController";
+import doctorController from "../controller/doctorController";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -29,6 +30,7 @@ let initWebRoutes = (app) => {
     router.put("/api/edit-user", userController.handleEditUser);
     router.get("/api/get-all-codes", userController.handleGetAllCodes);
 
+    router.get("/api/top-doctors-home", doctorController.handleGetTopDoctorsHome);
     return app.use("/", router); //use routers that we declared
 }
 
