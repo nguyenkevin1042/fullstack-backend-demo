@@ -31,6 +31,7 @@ let initWebRoutes = (app) => {
     router.get("/api/get-all-codes", userController.handleGetAllCodes);
 
     router.get("/api/top-doctors-home", doctorController.handleGetTopDoctorsHome);
+
     return app.use("/", router); //use routers that we declared
 }
 
