@@ -17,6 +17,37 @@ let handleGetTopDoctorsHome = async (request, response) => {
     }
 }
 
+let handleGetAllDoctors = async (request, response) => {
+
+    try {
+        let doctors = await doctorService.getAllDoctors();
+        return response.status(200).json(doctors);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController"
+        })
+    }
+}
+
+let handleSaveDoctorInfor = async (request, response) => {
+
+    try {
+        let doctors = await doctorService.saveDoctorInfor(request.body);
+
+        return response.status(200).json(doctors);
+    } catch (error) {
+        console.log(error);
+        // return response.status(200).json({
+        //     errCode: -1,
+        //     message: "error from doctorController.handleSaveDoctorInfor"
+        // })
+    }
+}
+
 module.exports = {
-    handleGetTopDoctorsHome: handleGetTopDoctorsHome
+    handleGetTopDoctorsHome: handleGetTopDoctorsHome,
+    handleGetAllDoctors: handleGetAllDoctors,
+    handleSaveDoctorInfor: handleSaveDoctorInfor
 }
