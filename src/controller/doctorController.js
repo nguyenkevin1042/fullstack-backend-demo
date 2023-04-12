@@ -39,15 +39,31 @@ let handleSaveDoctorInfor = async (request, response) => {
         return response.status(200).json(doctors);
     } catch (error) {
         console.log(error);
-        // return response.status(200).json({
-        //     errCode: -1,
-        //     message: "error from doctorController.handleSaveDoctorInfor"
-        // })
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleSaveDoctorInfor"
+        })
+    }
+}
+
+let handleGetDetailDoctorById = async (request, response) => {
+
+    try {
+        let info = await doctorService.getDoctorById(request.body.id);
+
+        return response.status(200).json(info);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleSaveDoctorInfor"
+        })
     }
 }
 
 module.exports = {
     handleGetTopDoctorsHome: handleGetTopDoctorsHome,
     handleGetAllDoctors: handleGetAllDoctors,
-    handleSaveDoctorInfor: handleSaveDoctorInfor
+    handleSaveDoctorInfor: handleSaveDoctorInfor,
+    handleGetDetailDoctorById: handleGetDetailDoctorById
 }

@@ -34,6 +34,7 @@ let initWebRoutes = (app) => {
     router.get("/api/get-all-doctors", doctorController.handleGetAllDoctors);
     router.post("/api/save-doctor-information", doctorController.handleSaveDoctorInfor);
 
+    router.get("/api/get-detail-doctor-by-id", doctorController.handleGetDetailDoctorById);
     return app.use("/", router); //use routers that we declared
 }
 
