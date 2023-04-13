@@ -49,7 +49,7 @@ let handleSaveDoctorInfor = async (request, response) => {
 let handleGetDetailDoctorById = async (request, response) => {
 
     try {
-        let info = await doctorService.getDoctorById(request.body.id);
+        let info = await doctorService.getDoctorById(request.query.id);
 
         return response.status(200).json(info);
     } catch (error) {
