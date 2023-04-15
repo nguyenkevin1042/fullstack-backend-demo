@@ -35,7 +35,7 @@ let handleSaveDoctorInfor = async (request, response) => {
 
     try {
         let doctors = await doctorService.saveDoctorInfor(request.body);
-
+        console.log(request.body)
         return response.status(200).json(doctors);
     } catch (error) {
         console.log(error);
