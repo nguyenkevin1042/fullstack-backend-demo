@@ -61,9 +61,24 @@ let handleGetDetailDoctorById = async (request, response) => {
     }
 }
 
+let handleBulkCreateSchedule = async (request, response) => {
+    try {
+        let schedule = await doctorService.bulkCreateSchedule(request.body);
+        return response.status(200).json(schedule);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleBulkCreateSchedule"
+        })
+    }
+}
+
+
 module.exports = {
     handleGetTopDoctorsHome: handleGetTopDoctorsHome,
     handleGetAllDoctors: handleGetAllDoctors,
     handleSaveDoctorInfor: handleSaveDoctorInfor,
-    handleGetDetailDoctorById: handleGetDetailDoctorById
+    handleGetDetailDoctorById: handleGetDetailDoctorById,
+    handleBulkCreateSchedule: handleBulkCreateSchedule
 }

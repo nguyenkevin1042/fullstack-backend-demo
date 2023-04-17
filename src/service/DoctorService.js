@@ -1,4 +1,8 @@
 import db from '../models/index';
+require('dotenv').config();
+import _ from 'lodash';
+
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorsHome = (limit) => {
     return new Promise(async (resolve, reject) => {
@@ -52,7 +56,6 @@ let saveDoctorInfor = (inputData) => {
     return new Promise(async (resolve, reject) => {
 
         try {
-            console.log(inputData)
             if (!inputData.doctorId
                 || !inputData.contentHTML
                 || !inputData.contentMarkdown
@@ -148,10 +151,75 @@ let getDoctorById = (inputId) => {
     });
 }
 
+let bulkCreateSchedule = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.selectedTime
+                && !data.doctorId
+                && !data.date) {
+                resolve({
+                    errCode: 1,
+                    message: 'Missing parameter'
+                })
+            } else {
+                let schedule = data.selectedTime;
+                let finalResult = [];
+
+                if (schedule && schedule.length > 0) {
+
+                    for (let i = 0; i < schedule.length; i++) {
+                        finalResult[i] = {
+                            doctorId: data.doctorId,
+                            date: data.date,
+                            timeType: schedule[i].keyMap,
+                            maxNumber: MAX_NUMBER_SCHEDULE
+                        }
+
+                    }
+                }
+
+                let existedData = await db.Schedule.findAll({
+                    where: { doctorId: data.doctorId, date: data.date },
+                    attributes: ['doctorId', 'timeType', 'date', 'maxNumber'],
+                    raw: true
+                })
+
+                if (existedData && existedData.length > 0) {
+                    existedData = existedData.map(item => {
+                        item.date = new Date(item.date).getTime();
+                        return item;
+                    })
+                }
+
+                let toCreate = _.differenceWith(finalResult, existedData, (a, b) => {
+                    return a.timeType === b.timeType && a.date === b.date;
+                }
+                )
+
+                if (toCreate && toCreate.length > 0) {
+                    await db.Schedule.bulkCreate(toCreate);
+                }
+
+
+
+                //await db.Schedule.bulkCreate(finalResult);
+                resolve({
+                    errCode: 0,
+                    message: "Save completed"
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
 
 module.exports = {
     getTopDoctorsHome: getTopDoctorsHome,
     getAllDoctors: getAllDoctors,
     saveDoctorInfor: saveDoctorInfor,
-    getDoctorById: getDoctorById
+    getDoctorById: getDoctorById,
+    bulkCreateSchedule: bulkCreateSchedule
 }
