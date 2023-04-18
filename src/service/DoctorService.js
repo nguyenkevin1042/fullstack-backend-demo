@@ -166,7 +166,6 @@ let bulkCreateSchedule = (data) => {
                 let finalResult = [];
 
                 if (schedule && schedule.length > 0) {
-
                     for (let i = 0; i < schedule.length; i++) {
                         finalResult[i] = {
                             doctorId: data.doctorId,
@@ -174,7 +173,6 @@ let bulkCreateSchedule = (data) => {
                             timeType: schedule[i].keyMap,
                             maxNumber: MAX_NUMBER_SCHEDULE
                         }
-
                     }
                 }
 
@@ -184,12 +182,7 @@ let bulkCreateSchedule = (data) => {
                     raw: true
                 })
 
-                if (existedData && existedData.length > 0) {
-                    existedData = existedData.map(item => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    })
-                }
+
 
                 let toCreate = _.differenceWith(finalResult, existedData, (a, b) => {
                     return a.timeType === b.timeType && a.date === b.date;
@@ -200,9 +193,6 @@ let bulkCreateSchedule = (data) => {
                     await db.Schedule.bulkCreate(toCreate);
                 }
 
-
-
-                //await db.Schedule.bulkCreate(finalResult);
                 resolve({
                     errCode: 0,
                     message: "Save completed"
@@ -216,10 +206,52 @@ let bulkCreateSchedule = (data) => {
 }
 
 
+let getScheduleByIdAndDate = (doctorId, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !date) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing paramater"
+                })
+            } else {
+                let data = await db.Schedule.findAll({
+                    where: {
+                        doctorId: doctorId,
+                        date: date
+                    },
+                    include: [
+                        { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEN', 'valueVI'] }
+                    ],
+                    raw: false,
+                    nest: true
+
+                })
+
+                if (!data) {
+                    data = [];
+                }
+
+
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
+
 module.exports = {
     getTopDoctorsHome: getTopDoctorsHome,
     getAllDoctors: getAllDoctors,
     saveDoctorInfor: saveDoctorInfor,
     getDoctorById: getDoctorById,
-    bulkCreateSchedule: bulkCreateSchedule
+    bulkCreateSchedule: bulkCreateSchedule,
+    getScheduleByIdAndDate: getScheduleByIdAndDate
 }
