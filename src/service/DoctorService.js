@@ -54,17 +54,18 @@ let getAllDoctors = () => {
 
 let saveDoctorInfor = (inputData) => {
     return new Promise(async (resolve, reject) => {
-
         try {
-            if (!inputData.doctorId
-                || !inputData.contentHTML
-                || !inputData.contentMarkdown
-                || !inputData.action) {
+            if (!inputData.doctorId || !inputData.contentHTML
+                || !inputData.contentMarkdown || !inputData.action
+                || !inputData.selectedPrice || !inputData.selectedPayment
+                || !inputData.selectedProvince || !inputData.nameClinic
+                || !inputData.addressClinic) {
                 resolve({
                     errCode: 1,
                     message: "Missing parameter",
                 })
             } else {
+                //Markdown table
                 if (inputData.action === 'EDIT') {
                     let doctorMarkdown = await db.Markdown.findOne({
                         where: { doctorId: inputData.doctorId },
@@ -85,6 +86,45 @@ let saveDoctorInfor = (inputData) => {
                         contentMarkdown: inputData.contentMarkdown,
                         description: inputData.description,
                         doctorId: inputData.doctorId
+                    })
+
+                    // await db.Doctor_Infor.create({
+                    //     doctorId: inputData.doctorId,
+                    //     priceId: inputData.selectedPrice,
+                    //     paymentId: inputData.selectedPayment,
+                    //     provinceId: inputData.selectedProvince,
+                    //     nameClinic: inputData.nameClinic,
+                    //     addressClinic: inputData.addressClinic,
+                    //     note: inputData.note
+                    // })
+                }
+
+                //Doctor_Info table
+                let doctorInfo = await db.Doctor_Infor.findOne({
+                    where: { doctorId: inputData.doctorId },
+                    raw: false
+                })
+
+                if (doctorInfo) {
+                    //update
+                    doctorInfo.priceId = inputData.selectedPrice;
+                    doctorInfo.paymentId = inputData.selectedPayment;
+                    doctorInfo.provinceId = inputData.selectedProvince;
+                    doctorInfo.nameClinic = inputData.nameClinic;
+                    doctorInfo.addressClinic = inputData.addressClinic;
+                    doctorInfo.note = inputData.note;
+                    await doctorInfo.save();
+
+                } else {
+                    //create
+                    await db.Doctor_Infor.create({
+                        doctorId: inputData.doctorId,
+                        priceId: inputData.selectedPrice,
+                        paymentId: inputData.selectedPayment,
+                        provinceId: inputData.selectedProvince,
+                        nameClinic: inputData.nameClinic,
+                        addressClinic: inputData.addressClinic,
+                        note: inputData.note
                     })
                 }
             }
