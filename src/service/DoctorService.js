@@ -162,10 +162,34 @@ let getDoctorById = (inputId) => {
                             attributes: ['contentHTML', 'contentMarkdown', 'description']
                         },
                         {
+                            model: db.Doctor_Infor,
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            },
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: 'priceData',
+                                    attributes: ['valueEN', 'valueVI']
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: 'paymentData',
+                                    attributes: ['valueEN', 'valueVI']
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: 'provinceData',
+                                    attributes: ['valueEN', 'valueVI']
+                                }
+                            ]
+                        },
+                        {
                             model: db.Allcode,
                             as: 'positionData',
                             attributes: ['valueEN', 'valueVI']
                         }
+
                     ],
                     raw: true,
                     nest: true
