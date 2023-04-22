@@ -87,6 +87,32 @@ let handleGetScheduleByIdAndDate = async (request, response) => {
     }
 }
 
+let handleGetExtraInfoById = async (request, response) => {
+    try {
+        let extraInfo = await doctorService.getExtraInfoById(request.query.doctorId);
+        return response.status(200).json(extraInfo);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleBulkCreateSchedule"
+        })
+    }
+}
+
+let handleGetProfileDoctorById = async (request, response) => {
+    try {
+        let profileDoctor = await doctorService.getProfileDoctorById(request.query.doctorId);
+        return response.status(200).json(profileDoctor);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleBulkCreateSchedule"
+        })
+    }
+}
+
 
 module.exports = {
     handleGetTopDoctorsHome: handleGetTopDoctorsHome,
@@ -94,5 +120,7 @@ module.exports = {
     handleSaveDoctorInfor: handleSaveDoctorInfor,
     handleGetDetailDoctorById: handleGetDetailDoctorById,
     handleBulkCreateSchedule: handleBulkCreateSchedule,
-    handleGetScheduleByIdAndDate: handleGetScheduleByIdAndDate
+    handleGetScheduleByIdAndDate: handleGetScheduleByIdAndDate,
+    handleGetExtraInfoById: handleGetExtraInfoById,
+    handleGetProfileDoctorById: handleGetProfileDoctorById
 }

@@ -62,15 +62,11 @@ let handleDeleteUser = async (request, response) => {
 
 let handleEditUser = async (request, response) => {
     try {
-        // let idParam = request.body.id;
         let result = {
             errCode: 0,
             message: ''
         };
-        // if (idParam === undefined) {
-        //     result.errCode = 2;
-        //     result.message = 'Missing ID';
-        // }
+
         result.message = await userService.editUser(request.body);
         return response.status(200).json(result);
     } catch (error) {
@@ -84,8 +80,7 @@ let handleGetAllCodes = async (request, response) => {
             let data = await userService.getAllCodes(request.query.type);
             return response.status(200).json(data);
         }, 5000)
-        // let data = await userService.getAllCodes(request.query.type);
-        // return response.status(200).json(data);
+
     } catch (error) {
         console.log('All errors: ', error);
         return response.status(200).json({

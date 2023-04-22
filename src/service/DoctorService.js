@@ -310,6 +310,128 @@ let getScheduleByIdAndDate = (doctorId, date) => {
     });
 }
 
+let getExtraInfoById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing paramater"
+                })
+            } else {
+                let data = await db.Doctor_Infor.findOne({
+                    where: { doctorId: inputId },
+                    attributes: {
+                        exclude: ['id', 'doctorId']
+                    },
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: 'priceData',
+                            attributes: ['valueEN', 'valueVI']
+                        },
+                        {
+                            model: db.Allcode,
+                            as: 'paymentData',
+                            attributes: ['valueEN', 'valueVI']
+                        },
+                        {
+                            model: db.Allcode,
+                            as: 'provinceData',
+                            attributes: ['valueEN', 'valueVI']
+                        }
+                    ],
+                    raw: false,
+                    nested: true
+                })
+
+                resolve({
+                    errCode: 1,
+                    data: data
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
+let getProfileDoctorById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing paramater"
+                })
+            } else {
+                let infoData = await db.User.findOne({
+                    where: {
+                        id: inputId
+                    },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    include: [
+                        {
+                            model: db.Markdown,
+                            attributes: ['contentHTML', 'contentMarkdown', 'description']
+                        },
+                        {
+                            model: db.Doctor_Infor,
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            },
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: 'priceData',
+                                    attributes: ['valueEN', 'valueVI']
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: 'paymentData',
+                                    attributes: ['valueEN', 'valueVI']
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: 'provinceData',
+                                    attributes: ['valueEN', 'valueVI']
+                                }
+                            ]
+                        },
+                        {
+                            model: db.Allcode,
+                            as: 'positionData',
+                            attributes: ['valueEN', 'valueVI']
+                        }
+
+                    ],
+                    raw: false,
+                    nest: true
+                })
+
+                if (infoData && infoData.image) {
+                    infoData.image = new Buffer(infoData.image, 'base64').toString('binary');
+                }
+
+                if (!infoData) {
+                    infoData = {};
+                }
+
+                resolve({
+                    errCode: 0,
+                    data: infoData
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
 
 module.exports = {
     getTopDoctorsHome: getTopDoctorsHome,
@@ -317,5 +439,7 @@ module.exports = {
     saveDoctorInfor: saveDoctorInfor,
     getDoctorById: getDoctorById,
     bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByIdAndDate: getScheduleByIdAndDate
+    getScheduleByIdAndDate: getScheduleByIdAndDate,
+    getExtraInfoById: getExtraInfoById,
+    getProfileDoctorById: getProfileDoctorById
 }

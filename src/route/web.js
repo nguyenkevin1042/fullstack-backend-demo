@@ -38,6 +38,11 @@ let initWebRoutes = (app) => {
 
     router.post("/api/bulk-create-schedule", doctorController.handleBulkCreateSchedule);
     router.get("/api/get-doctor-schedule-by-id-and-date", doctorController.handleGetScheduleByIdAndDate);
+    router.get("/api/get-extra-info-by-id",
+        doctorController.handleGetExtraInfoById);
+
+    router.get("/api/get-profile-doctor-by-id",
+        doctorController.handleGetProfileDoctorById);
 
     return app.use("/", router); //use routers that we declared
 }
