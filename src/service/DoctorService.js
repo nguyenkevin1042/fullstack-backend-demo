@@ -398,14 +398,20 @@ let getProfileDoctorById = (inputId) => {
                                     model: db.Allcode,
                                     as: 'provinceData',
                                     attributes: ['valueEN', 'valueVI']
-                                }
+                                },
+
                             ]
                         },
                         {
                             model: db.Allcode,
                             as: 'positionData',
                             attributes: ['valueEN', 'valueVI']
-                        }
+                        },
+                        // {
+                        //     model: db.Allcode,
+                        //     as: 'timeTypeData',
+                        //     attributes: ['valueEN', 'valueVI']
+                        // }
 
                     ],
                     raw: false,

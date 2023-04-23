@@ -3,6 +3,8 @@ import express from "express";
 import homeController from "../controller/homeController";
 import userController from "../controller/userController";
 import doctorController from "../controller/doctorController";
+import patientController from "../controller/patientController";
+
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -43,6 +45,9 @@ let initWebRoutes = (app) => {
 
     router.get("/api/get-profile-doctor-by-id",
         doctorController.handleGetProfileDoctorById);
+
+    router.post("/api/patient-book-schedule",
+        patientController.handleSavePatientBookSchedule);
 
     return app.use("/", router); //use routers that we declared
 }
