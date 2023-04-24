@@ -33,7 +33,6 @@ let handleGetAllUsers = async (request, response) => {
 let handleCreateNewUser = async (request, response) => {
     try {
         let message = await userService.createNewUser(request.body);
-        console.log(message);
         return response.status(200).json(message);
     } catch (error) {
         console.log(error);

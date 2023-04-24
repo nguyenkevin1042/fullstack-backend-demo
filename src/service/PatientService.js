@@ -4,7 +4,6 @@ require("dotenv").config();
 let saveNewPatientBookingSchedule = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(data)
             if (!data.email && !data.doctorId &&
                 !data.timeType && !data.date) {
                 resolve({
@@ -13,6 +12,7 @@ let saveNewPatientBookingSchedule = (data) => {
                 })
             } else {
                 //upsert patient
+
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
                     defaults: {
@@ -35,7 +35,6 @@ let saveNewPatientBookingSchedule = (data) => {
 
                     })
                 }
-
 
                 resolve({
                     errCode: 0,
