@@ -1,4 +1,5 @@
 import db from '../models/index';
+import emailService from './EmailService';
 require("dotenv").config();
 
 let saveNewPatientBookingSchedule = (data) => {
@@ -12,6 +13,12 @@ let saveNewPatientBookingSchedule = (data) => {
                 })
             } else {
                 //upsert patient
+                await emailService.sendSimpleEmail({
+                    receiverEmail: data.email,
+                    patientName: data.fullName,
+                    time: data.timeData.timeTypeData.valueVI,
+                    reason: data.reason
+                });
 
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
