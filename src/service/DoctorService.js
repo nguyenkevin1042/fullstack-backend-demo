@@ -88,15 +88,7 @@ let saveDoctorInfor = (inputData) => {
                         doctorId: inputData.doctorId
                     })
 
-                    // await db.Doctor_Infor.create({
-                    //     doctorId: inputData.doctorId,
-                    //     priceId: inputData.selectedPrice,
-                    //     paymentId: inputData.selectedPayment,
-                    //     provinceId: inputData.selectedProvince,
-                    //     nameClinic: inputData.nameClinic,
-                    //     addressClinic: inputData.addressClinic,
-                    //     note: inputData.note
-                    // })
+
                 }
 
                 //Doctor_Info table
@@ -285,7 +277,16 @@ let getScheduleByIdAndDate = (doctorId, date) => {
                         date: date
                     },
                     include: [
-                        { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEN', 'valueVI'] }
+                        {
+                            model: db.Allcode,
+                            as: 'timeTypeData',
+                            attributes: ['valueEN', 'valueVI']
+                        },
+                        {
+                            model: db.User,
+                            as: 'doctorData',
+                            attributes: ['firstName', 'lastName']
+                        }
                     ],
                     raw: false,
                     nest: true

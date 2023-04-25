@@ -16,7 +16,9 @@ let saveNewPatientBookingSchedule = (data) => {
                 await emailService.sendSimpleEmail({
                     receiverEmail: data.email,
                     patientName: data.fullName,
-                    time: data.timeData.timeTypeData.valueVI,
+                    doctorName: data.doctorName,
+                    time: data.timeString,
+                    language: data.language,
                     reason: data.reason
                 });
 
