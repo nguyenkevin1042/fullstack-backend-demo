@@ -1,4 +1,4 @@
-import patientService from '../service/patientService';
+import patientService from '../service/PatientService';
 
 let handleSavePatientBookSchedule = async (request, response) => {
     try {
@@ -9,7 +9,19 @@ let handleSavePatientBookSchedule = async (request, response) => {
     }
 }
 
+let handleVerifyBooking = async (request, response) => {
+    try {
+        // console.log(request.body)
+        // console.log(request.query)
+        let message = await patientService.verifyBooking(request.query);
+        return response.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
-    handleSavePatientBookSchedule: handleSavePatientBookSchedule
+    handleSavePatientBookSchedule: handleSavePatientBookSchedule,
+    handleVerifyBooking: handleVerifyBooking
 }

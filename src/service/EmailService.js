@@ -34,14 +34,16 @@ let getBodyHtmlEmail = (dataSend) => {
     let result = '';
     if (dataSend.language === 'vi') {
         result = "<h3> Xin chào " + dataSend.patientName + "</h3>" +
-            "<p> - Bạn nhận được email này vì đã đặt lịch hẹn thành công.</p>" +
+            "<p>- Bạn nhận được email này vì đã đặt lịch hẹn thành công.</p>" +
             "<p>- Thông tin lịch hẹn:</p>" +
             "<ul>" +
             "<li>Thời gian: " + dataSend.time + "</li>" +
             "<li>Bác sĩ: " + dataSend.doctorName + "</li>" +
             "<li>Lý do khám: " + dataSend.reason + " </li>" +
-            // "<li>Giá khám:" + dataSend.price + " </li>" +
-            "</ul>"
+            "</ul>" +
+            "<p>- Nếu những thông tin trên là chính xác. Vui lòng nhấn vào đường link sau để xác nhận lịch hẹn:</p>" +
+            dataSend.redirectLink;
+
     }
     if (dataSend.language === 'en') {
         result = "<h3> Dear " + dataSend.patientName + "</h3>" +
@@ -51,8 +53,9 @@ let getBodyHtmlEmail = (dataSend) => {
             "<li>Time: " + dataSend.time + "</li>" +
             "<li>Doctor: " + dataSend.doctorName + "</li>" +
             "<li>Reason: " + dataSend.reason + " </li>" +
-            // "<li>Giá khám:" + dataSend.price + " </li>" +
-            "</ul>"
+            "</ul>" +
+            "<p>- Nếu những thông tin trên là chính xác. Vui lòng nhấn vào đường link sau để xác nhận lịch hẹn:</p>" +
+            dataSend.redirectLink;
     }
     return result;
 }
