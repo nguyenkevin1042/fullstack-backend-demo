@@ -9,7 +9,17 @@ let handleSaveNewSpecialty = async (request, response) => {
     }
 }
 
+let handleGetAllSpecialty = async (request, response) => {
+    try {
+        let message = await specialtyService.getAllSpecialty(request.body);
+        return response.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
-    handleSaveNewSpecialty: handleSaveNewSpecialty
+    handleSaveNewSpecialty: handleSaveNewSpecialty,
+    handleGetAllSpecialty: handleGetAllSpecialty
 }

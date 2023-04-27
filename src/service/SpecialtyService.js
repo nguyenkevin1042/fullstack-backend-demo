@@ -30,6 +30,31 @@ let saveNewSpecialty = (data) => {
     });
 }
 
+let getAllSpecialty = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Specialty.findAll();
+            console.log("Before: ", data)
+            if (data && data.length > 0) {
+                data.map(item => {
+                    item.image = new Buffer(item.image, 'base64').toString('binary');
+                    return item;
+                })
+            }
+            console.log("After: ", data)
+
+            resolve({
+                errCode: 0,
+                message: "getAllSpecialty OK",
+                data: data
+            })
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
 module.exports = {
-    saveNewSpecialty: saveNewSpecialty
+    saveNewSpecialty: saveNewSpecialty,
+    getAllSpecialty: getAllSpecialty
 }
