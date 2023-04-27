@@ -1,0 +1,35 @@
+import db from '../models/index';
+
+let saveNewSpecialty = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.name || !data.imageBase64 ||
+                !data.contentHTML || !data.contentMarkdown) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing parameter"
+                })
+            } else {
+
+                await db.Specialty.create({
+                    descriptionMarkdown: data.contentMarkdown,
+                    descriptionHTML: data.contentHTML,
+                    image: data.imageBase64,
+                    name: data.name
+                });
+
+                resolve({
+                    errCode: 0,
+                    errMessage: "Create new specialty successful"
+                })
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+module.exports = {
+    saveNewSpecialty: saveNewSpecialty
+}
