@@ -11,8 +11,6 @@ let handleSavePatientBookSchedule = async (request, response) => {
 
 let handleVerifyBooking = async (request, response) => {
     try {
-        // console.log(request.body)
-        // console.log(request.query)
         let message = await patientService.verifyBooking(request.body);
         return response.status(200).json(message);
     } catch (error) {

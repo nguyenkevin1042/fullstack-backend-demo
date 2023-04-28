@@ -15,7 +15,6 @@ let buildUrlEmail = (doctorId, token) => {
 let saveNewPatientBookingSchedule = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("check buildUrlEmail(data.doctorId): ", buildUrlEmail(data.doctorId))
             if (!data.email && !data.doctorId &&
                 !data.timeType && !data.date) {
                 resolve({
@@ -74,7 +73,6 @@ let saveNewPatientBookingSchedule = (data) => {
 let verifyBooking = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(data)
             if (!data.doctorId || !data.token) {
                 resolve({
                     errCode: 1,
