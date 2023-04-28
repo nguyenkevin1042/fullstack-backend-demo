@@ -52,17 +52,37 @@ let getAllDoctors = () => {
     });
 }
 
+//
+let checkRequiredParams = (inputData) => {
+    //, 'nameClinic'
+    let arr = ['doctorId', 'contentHTML', 'contentMarkdown', 'action',
+        'selectedPrice', 'selectedPayment', 'selectedProvince',
+        'addressClinic', 'note', 'selectedSpecialty']
+    let isValid = true;
+    let element = '';
+    for (let index = 0; index < arr.length; index++) {
+        if (!inputData[arr[index]]) {
+            isValid = false;
+            element = arr[index]
+            break;
+        }
+
+    }
+    return {
+        isValid: isValid,
+        element: element
+    }
+}
+
 let saveDoctorInfor = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.doctorId || !inputData.contentHTML
-                || !inputData.contentMarkdown || !inputData.action
-                || !inputData.selectedPrice || !inputData.selectedPayment
-                || !inputData.selectedProvince || !inputData.nameClinic
-                || !inputData.addressClinic) {
+            let checkParams = checkRequiredParams(inputData);
+
+            if (checkParams.isValid === false) {
                 resolve({
                     errCode: 1,
-                    message: "Missing parameter",
+                    message: "Missing " + checkParams.element + " parameter",
                 })
             } else {
                 //Markdown table
@@ -99,6 +119,8 @@ let saveDoctorInfor = (inputData) => {
 
                 if (doctorInfo) {
                     //update
+                    doctorInfo.specialtyId = inputData.selectedSpecialty;
+                    doctorInfo.clinicId = inputData.selectedClinic;
                     doctorInfo.priceId = inputData.selectedPrice;
                     doctorInfo.paymentId = inputData.selectedPayment;
                     doctorInfo.provinceId = inputData.selectedProvince;
@@ -107,10 +129,17 @@ let saveDoctorInfor = (inputData) => {
                     doctorInfo.note = inputData.note;
                     await doctorInfo.save();
 
+                    resolve({
+                        errCode: 0,
+                        message: "Updated successful",
+                    })
+
                 } else {
                     //create
                     await db.Doctor_Infor.create({
                         doctorId: inputData.doctorId,
+                        specialtyId: inputData.selectedSpecialty,
+                        clinicId: inputData.selectedClinic,
                         priceId: inputData.selectedPrice,
                         paymentId: inputData.selectedPayment,
                         provinceId: inputData.selectedProvince,
@@ -118,13 +147,16 @@ let saveDoctorInfor = (inputData) => {
                         addressClinic: inputData.addressClinic,
                         note: inputData.note
                     })
+
+                    resolve({
+                        errCode: 0,
+                        message: "Create successful",
+                    })
                 }
+
             }
 
-            resolve({
-                errCode: 1,
-                message: "Missing parameter",
-            })
+
 
         } catch (error) {
             reject(error)
