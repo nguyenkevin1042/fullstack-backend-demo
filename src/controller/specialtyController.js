@@ -18,8 +18,19 @@ let handleGetAllSpecialty = async (request, response) => {
     }
 }
 
+let handleGetDetailSpecialtyById = async (request, response) => {
+    try {
+        let message = await specialtyService.getDetailSpecialtyById(request.query.id, request.query.location);
+        return response.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
     handleSaveNewSpecialty: handleSaveNewSpecialty,
-    handleGetAllSpecialty: handleGetAllSpecialty
+    handleGetAllSpecialty: handleGetAllSpecialty,
+    handleGetDetailSpecialtyById: handleGetDetailSpecialtyById
+
 }
