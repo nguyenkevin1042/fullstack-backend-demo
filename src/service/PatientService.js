@@ -14,9 +14,12 @@ let buildUrlEmail = (doctorId, token) => {
 
 let saveNewPatientBookingSchedule = (data) => {
     return new Promise(async (resolve, reject) => {
+        console.log(data)
         try {
             if (!data.email && !data.doctorId &&
-                !data.timeType && !data.date) {
+                !data.timeType && !data.date &&
+                !data.fullName && !data.gender &&
+                !data.address) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing parameter"
@@ -37,6 +40,9 @@ let saveNewPatientBookingSchedule = (data) => {
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
                     defaults: {
+                        firstName: data.fullName,
+                        gender: data.gender.value,
+                        address: data.address,
                         email: data.email,
                         roleId: 'R3'
                     }
@@ -52,7 +58,8 @@ let saveNewPatientBookingSchedule = (data) => {
                             patientId: user[0].id,
                             date: data.date,
                             timeType: data.timeType,
-                            token: token
+                            token: token,
+
                         }
 
                     })

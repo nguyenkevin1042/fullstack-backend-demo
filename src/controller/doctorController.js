@@ -112,6 +112,19 @@ let handleGetProfileDoctorById = async (request, response) => {
     }
 }
 
+let handleGetListPatient = async (request, response) => {
+    try {
+        let listPatient = await doctorService.getListPatient(request.query.doctorId, request.query.date);
+        return response.status(200).json(listPatient);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleGetListPatient"
+        })
+    }
+}
+
 
 module.exports = {
     handleGetTopDoctorsHome: handleGetTopDoctorsHome,
@@ -121,5 +134,6 @@ module.exports = {
     handleBulkCreateSchedule: handleBulkCreateSchedule,
     handleGetScheduleByIdAndDate: handleGetScheduleByIdAndDate,
     handleGetExtraInfoById: handleGetExtraInfoById,
-    handleGetProfileDoctorById: handleGetProfileDoctorById
+    handleGetProfileDoctorById: handleGetProfileDoctorById,
+    handleGetListPatient: handleGetListPatient
 }
