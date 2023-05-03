@@ -490,6 +490,11 @@ let getListPatient = (doctorId, date) => {
                             model: db.User,
                             as: 'patientData',
                             attributes: ['email', 'firstName', 'address', 'gender']
+                        },
+                        {
+                            model: db.Allcode,
+                            as: 'timeTypeDataBooking',
+                            attributes: ['valueVI', 'valueEN']
                         }
                     ],
                     raw: true,

@@ -14,7 +14,7 @@ let buildUrlEmail = (doctorId, token) => {
 
 let saveNewPatientBookingSchedule = (data) => {
     return new Promise(async (resolve, reject) => {
-        console.log(data)
+
         try {
             if (!data.email && !data.doctorId &&
                 !data.timeType && !data.date &&
@@ -50,17 +50,29 @@ let saveNewPatientBookingSchedule = (data) => {
 
                 //create booking record
                 if (user && user[0]) {
-                    await db.Booking.findOrCreate({
-                        where: { patientId: user[0].id },
-                        defaults: {
-                            statusId: 'S1',
-                            doctorId: data.doctorId,
-                            patientId: user[0].id,
-                            date: data.date,
-                            timeType: data.timeType,
-                            token: token,
+                    // await db.Booking.findOrCreate({
+                    //     where: { patientId: user[0].id },
+                    //     defaults: {
+                    //         statusId: 'S1',
+                    //         doctorId: data.doctorId,
+                    //         patientId: user[0].id,
+                    //         date: data.date,
+                    //         timeType: data.timeType,
+                    //         token: token,
 
-                        }
+                    //     }
+
+                    // })
+                    await db.Booking.create({
+
+                        statusId: 'S1',
+                        doctorId: data.doctorId,
+                        patientId: user[0].id,
+                        date: data.date,
+                        timeType: data.timeType,
+                        token: token,
+
+
 
                     })
                 }
