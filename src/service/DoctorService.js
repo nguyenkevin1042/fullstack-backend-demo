@@ -1,4 +1,5 @@
 import db from '../models/index';
+import emailService from './EmailService'
 require('dotenv').config();
 import _ from 'lodash';
 
@@ -496,11 +497,12 @@ let getListPatient = (doctorId, date) => {
                             as: 'timeTypeDataBooking',
                             attributes: ['valueVI', 'valueEN']
                         }
+
                     ],
                     raw: true,
                     nest: true
                 });
-                console.log(patients)
+
                 resolve({
                     errCode: 0,
                     data: patients
@@ -514,6 +516,51 @@ let getListPatient = (doctorId, date) => {
     });
 }
 
+let sendRemedy = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!inputData.email || !inputData.doctorId
+                || !inputData.patientId || !inputData.timeType) {
+                resolve({
+                    errCode: 1,
+                    message: "Missing paramater"
+                })
+            } else {
+                //update booking status
+                let data = await db.Booking.findOne({
+                    where: {
+                        doctorId: inputData.doctorId,
+                        patientId: inputData.patientId,
+                        timeType: inputData.timeType,
+                        statusId: 'S2'
+                    },
+                    raw: false
+                })
+
+                if (data) {
+                    data.statusId = 'S3';
+                    await data.save();
+                }
+
+                //send email
+
+                await emailService.sendAttachment(inputData)
+
+                resolve({
+                    errCode: 0,
+                    message: "sendRemedy OK",
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
+
+
 module.exports = {
     getTopDoctorsHome: getTopDoctorsHome,
     getAllDoctors: getAllDoctors,
@@ -523,5 +570,6 @@ module.exports = {
     getScheduleByIdAndDate: getScheduleByIdAndDate,
     getExtraInfoById: getExtraInfoById,
     getProfileDoctorById: getProfileDoctorById,
-    getListPatient: getListPatient
+    getListPatient: getListPatient,
+    sendRemedy: sendRemedy
 }

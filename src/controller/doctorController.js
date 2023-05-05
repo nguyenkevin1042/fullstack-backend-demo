@@ -125,6 +125,19 @@ let handleGetListPatient = async (request, response) => {
     }
 }
 
+let handleSendRemedy = async (request, response) => {
+    try {
+        let res = await doctorService.sendRemedy(request.body);
+        return response.status(200).json(res);
+    } catch (error) {
+        console.log(error);
+        return response.status(200).json({
+            errCode: -1,
+            message: "error from doctorController.handleSendRemedy"
+        })
+    }
+}
+
 
 module.exports = {
     handleGetTopDoctorsHome: handleGetTopDoctorsHome,
@@ -135,5 +148,6 @@ module.exports = {
     handleGetScheduleByIdAndDate: handleGetScheduleByIdAndDate,
     handleGetExtraInfoById: handleGetExtraInfoById,
     handleGetProfileDoctorById: handleGetProfileDoctorById,
-    handleGetListPatient: handleGetListPatient
+    handleGetListPatient: handleGetListPatient,
+    handleSendRemedy: handleSendRemedy
 }

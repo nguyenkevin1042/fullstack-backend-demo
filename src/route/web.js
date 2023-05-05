@@ -71,6 +71,11 @@ let initWebRoutes = (app) => {
         clinicController.handleGetAllClinic);
     router.get("/api/get-detail-clinic-by-id",
         clinicController.handleGetDetailClinicById);
+
+    router.post("/api/send-remedy",
+        doctorController.handleSendRemedy);
+
+
     return app.use("/", router); //use routers that we declared
 }
 
