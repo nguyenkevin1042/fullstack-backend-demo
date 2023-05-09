@@ -221,7 +221,7 @@ let getDoctorById = (inputId) => {
                 })
 
                 if (infoData && infoData.image) {
-                    infoData.image = new Buffer(infoData.image, 'base64').toString('binary');
+                    infoData.image = Buffer.from(infoData.image, 'base64').toString('binary');
                 }
 
                 if (!infoData) {
@@ -452,7 +452,7 @@ let getProfileDoctorById = (inputId) => {
                 })
 
                 if (infoData && infoData.image) {
-                    infoData.image = new Buffer(infoData.image, 'base64').toString('binary');
+                    infoData.image = Buffer.from(infoData.image, 'base64').toString('binary');
                 }
 
                 if (!infoData) {
