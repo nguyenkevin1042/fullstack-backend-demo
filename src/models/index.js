@@ -35,7 +35,7 @@ const customizeConfig = {
 sequelize = new Sequelize(
   process.env.DB_DATABASE_NAME,
   process.env.DB_USERNAME,
-  null,
+  process.env.DB_PASSWORD,
   customizeConfig);
 
 
