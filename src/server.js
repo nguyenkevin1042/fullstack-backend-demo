@@ -10,6 +10,16 @@ require("dotenv").config();
 
 let app = express(); // instance of app express
 
+// app.use(cors());
+// app.use(function (req, res, next) {
+//     res.setHeader('Access-Control-Allow-Origin', process.env.URL_REACT);
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     next();
+// });
+
+
 const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,            //access-control-allow-credentials:true
@@ -36,5 +46,6 @@ connectDB();
 
 let port = process.env.port || 8000;
 app.listen(port, () => {
+    console.log("Backend NodeJS is running with Postgres Database ");
     console.log("Backend NodeJS is running with port: " + port);
 });

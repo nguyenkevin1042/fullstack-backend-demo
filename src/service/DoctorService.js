@@ -243,6 +243,7 @@ let getDoctorById = (inputId) => {
 let bulkCreateSchedule = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(data)
             if (!data.selectedTime
                 && !data.doctorId
                 && !data.date) {
