@@ -21,7 +21,7 @@ let app = express(); // instance of app express
 
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.URL_REACT,
     credentials: true,            //access-control-allow-credentials:true
     optionSuccessStatus: 200
 }
